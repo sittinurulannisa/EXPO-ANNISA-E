@@ -1,67 +1,89 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+
+const initialImageGridData = [
+  { id: 1, frontImage: 'https://picsum.photos/id/101/200', backImage: 'https://picsum.photos/id/102/200', flipped: false, scaleValue: 1 },
+  { id: 2, frontImage: 'https://picsum.photos/id/103/200', backImage: 'https://picsum.photos/id/104/200', flipped: false, scaleValue: 1 },
+  { id: 3, frontImage: 'https://picsum.photos/id/105/200', backImage: 'https://picsum.photos/id/106/200', flipped: false, scaleValue: 1 },
+  { id: 4, frontImage: 'https://picsum.photos/id/107/200', backImage: 'https://picsum.photos/id/108/200', flipped: false, scaleValue: 1 },
+  { id: 5, frontImage: 'https://picsum.photos/id/109/200', backImage: 'https://picsum.photos/id/110/200', flipped: false, scaleValue: 1 },
+  { id: 6, frontImage: 'https://picsum.photos/id/111/200', backImage: 'https://picsum.photos/id/112/200', flipped: false, scaleValue: 1 },
+  { id: 7, frontImage: 'https://picsum.photos/id/113/200', backImage: 'https://picsum.photos/id/114/200', flipped: false, scaleValue: 1 },
+  { id: 8, frontImage: 'https://picsum.photos/id/115/200', backImage: 'https://picsum.photos/id/116/200', flipped: false, scaleValue: 1 },
+  { id: 9, frontImage: 'https://picsum.photos/id/117/200', backImage: 'https://picsum.photos/id/118/200', flipped: false, scaleValue: 1 },
+];
 
 export default function Index() {
+  const [imageGridData, setImageGridData] = useState(initialImageGridData);
+
+  const onImagePress = (imageId: number) => {
+    setImageGridData(currentGrid =>
+      currentGrid.map(image => {
+        if (image.id === imageId) {
+          const updatedScale = Math.min(image.scaleValue * 1.2, 2);
+          return {
+            ...image,
+            flipped: !image.flipped,
+            scaleValue: updatedScale,
+          };
+        }
+        return image;
+      })
+    );
+  };
+
   return (
-    <View style={styles.container}>
-      {/* Persegi Panjang dengan Nama */}
-      <View style={styles.rectangle}>
-        <Text style={styles.text}>SITTI NURUL ANNISA</Text>
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.gridWrapper}>
+        {imageGridData.map(image => (
+          <TouchableOpacity
+            key={image.id}
+            onPress={() => onImagePress(image.id)}
+            style={styles.gridItem}
+            activeOpacity={0.8}
+          >
+            <Image
+              source={{ uri: image.flipped ? image.backImage : image.frontImage }}
+              style={[
+                styles.gridImage,
+                { transform: [{ scale: image.scaleValue }] }
+              ]}
+              resizeMode="cover"
+            />
+          </TouchableOpacity>
+        ))}
       </View>
-
-      {/* Segitiga */}
-      <View style={styles.triangle} />
-
-      {/* Bentuk Pil (Capsule) */}
-      <View style={styles.pill}>
-        <Text style={styles.pillText}>105841115522</Text>
-      </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
+    flexGrow: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 60,
+    backgroundColor: "#fff"
+  },
+  gridWrapper: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'center',
-    alignItems: 'center',
-    gap: 30,
+    width: '100%',
+    maxWidth: 330,
   },
-  rectangle: {
-    width: 250,
-    height: 80,
-    backgroundColor: '#d2b48c', // coklat muda
+  gridItem: {
+    width: 100,
+    height: 100,
+    margin: 5,
+    backgroundColor: '#e0e0e0',
+    borderRadius: 8,
+    overflow: 'hidden',
+    alignItems: 'center',
     justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 10,
   },
-  text: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  triangle: {
-    width: 0,
-    height: 0,
-    borderLeftWidth: 60,
-    borderRightWidth: 60,
-    borderBottomWidth: 100,
-    borderStyle: 'solid',
-    backgroundColor: 'transparent',
-    borderLeftColor: 'transparent',
-    borderRightColor: 'transparent',
-    borderBottomColor: '#ff6347', // oranye merah
-  },
-  pill: {
-    paddingHorizontal: 30,
-    paddingVertical: 15,
-    backgroundColor: '#32cd32', // hijau cerah
-    borderRadius: 50,
-  },
-  pillText: {
-    color: 'white',
-    fontSize: 16,
-    textAlign: 'center',
-  },
+  gridImage: {
+    width: 100,
+    height: 100,
+  }
 });
