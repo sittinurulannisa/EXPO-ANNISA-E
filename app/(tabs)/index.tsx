@@ -1,96 +1,43 @@
-import React, { useState } from "react";
+import { Text, View } from 'react-native';
+import { useFonts } from 'expo-font';
 
-const mainImages = [
-  "https://picsum.photos/id/1015/200/200",
-  "https://picsum.photos/id/1016/200/200",
-  "https://picsum.photos/id/1018/200/200",
-  "https://picsum.photos/id/1020/200/200",
-  "https://picsum.photos/id/1024/200/200",
-  "https://picsum.photos/id/1027/200/200",
-  "https://picsum.photos/id/1033/200/200",
-  "https://picsum.photos/id/1035/200/200",
-  "https://picsum.photos/id/1037/200/200",
-];
+export default function App() {
+  const [fontsLoaded] = useFonts({
+    'Lato-Italic': require('./fonts/Lato-Italic.ttf'),
+    'Montserrat-Light': require('./fonts/Montserrat-Light.ttf'),
+    'OpenSans-Bold': require('./fonts/OpenSans-Bold.ttf'),
+    'Poppins-SemiBold': require('./fonts/Poppins-SemiBold.ttf'),
+    'Roboto-Regular': require('./fonts/Roboto-Regular.ttf'),
 
-const altImages = [
-  "https://picsum.photos/id/1011/200/200",
-  "https://picsum.photos/id/1012/200/200",
-  "https://picsum.photos/id/1013/200/200",
-  "https://picsum.photos/id/1014/200/200",
-  "https://picsum.photos/id/1019/200/200",
-  "https://picsum.photos/id/1021/200/200",
-  "https://picsum.photos/id/1022/200/200",
-  "https://picsum.photos/id/1025/200/200",
-  "https://picsum.photos/id/1026/200/200",
-];
+    'Inter-Variable': require('./fonts/Inter-VariableFont_opsz,wght.ttf'),
+    'Montserrat-Variable': require('./fonts/Montserrat-VariableFont_wght.ttf'),
+    'NotoSans-Variable': require('./fonts/NotoSans-VariableFont_wdth,wght.ttf'),
+    'OpenSans-Variable': require('./fonts/OpenSans-VariableFont_wdth,wght.ttf'),
+    'Roboto-Variable': require('./fonts/Roboto-VariableFont_wdth,wght.ttf'),
+  });
 
-type ImageState = {
-  isAlt: boolean; // apakah memakai gambar alternatif
-  scale: number;  // skala gambar saat ini
-};
+  if (!fontsLoaded) return null;
 
-export default function ImageGrid() {
-  // Inisialisasi semua gambar utama, scale 1
-  const [images, setImages] = useState<ImageState[]>(
-    Array(9).fill({ isAlt: false, scale: 1 })
-  );
-
-  // Ketika gambar diklik
-  const handleClick = (index: number) => {
-    setImages((prev) =>
-      prev.map((img, i) => {
-        if (i === index) {
-          const newScale = Math.min(img.scale * 1.2, 2);
-          return {
-            isAlt: !img.isAlt,
-            scale: newScale,
-          };
-        } else {
-          return img;
-        }
-      })
-    );
-  };
+  const names = [
+    { name: 'Andi', font: 'Lato-Italic' },
+    { name: 'Budi', font: 'Montserrat-Light' },
+    { name: 'Citra', font: 'OpenSans-Bold' },
+    { name: 'Dian', font: 'Poppins-SemiBold' },
+    { name: 'Eka', font: 'Roboto-Regular' },
+    { name: 'Fajar', font: 'Inter-Variable' },
+    { name: 'Gita', font: 'Montserrat-Variable' },
+    { name: 'Hana', font: 'NotoSans-Variable' },
+    { name: 'Indra', font: 'OpenSans-Variable' },
+    { name: 'Joko', font: 'Roboto-Variable' },
+  ];
 
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(3, 200px)",
-        gridTemplateRows: "repeat(3, 200px)",
-        gap: 10,
-        justifyContent: "center",
-        marginTop: 20,
-      }}
-    >
-      {images.map(({ isAlt, scale }, idx) => (
-        <div
-          key={idx}
-          style={{
-            width: 200,
-            height: 200,
-            overflow: "hidden",
-            cursor: "pointer",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-          onClick={() => handleClick(idx)}
-        >
-          <img
-            src={isAlt ? altImages[idx] : mainImages[idx]}
-            alt={`gambar-${idx}`}
-            style={{
-              width: 200,
-              height: 200,
-              objectFit: "cover",
-              transform: `scale(${scale})`,
-              transition: "transform 0.3s ease",
-              display: "block",
-            }}
-          />
-        </div>
+    <View style={{ padding: 20 }}>
+      {names.map((item, index) => (
+        <Text key={index} style={{ fontFamily: item.font, fontSize: 20, marginVertical: 5 }}>
+          {item.name}
+        </Text>
       ))}
-    </div>
+    </View>
   );
 }
